@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from 'axios';
+import React, { useEffect } from 'react';
+import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
+import Login from './auth/Login';
+import ProtectRoute from './auth/ProtectRoute';
+import Register from './auth/Register';
+import Home from './screens/home/home';
+import MovieDetails from './screens/movieDetails/movieDetails';
+import HeadersComponent from './components/header/header';
+import Booking from './screens/bookingArea/Booking';
+
+
+
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  useEffect(()=>{
+    
+  },[])
+
+  return <>
+   {/* <HeadersComponent/> */}
+  <Router>
+    <Routes>
+      <Route path='/' element={<Login/>}/>
+      <Route path='/register' element={<Register/>}/>
+      <Route element={<ProtectRoute/>}>
+          <Route path='/home' element={<Home/>}/>
+          <Route path='/details' element={<MovieDetails/>}/>
+          <Route path='/booking' element={<Booking/>}/>
+      </Route>
+    </Routes>
+  </Router>
+  </>
 }
 
 export default App;

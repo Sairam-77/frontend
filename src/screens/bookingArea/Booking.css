@@ -1,0 +1,117 @@
+
+.booking-head{
+    /* background-color: rgb(215, 235, 255); */
+    display: flex;
+    flex-direction: row;
+    gap: 21%;
+}
+.booking-head> .c1{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 30px;
+    padding: 15px;
+}
+.booking-head> .c2{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px;
+    padding: 15px;
+}
+
+.title-d{
+    width: 100%;
+    background-color: #f5f9fe;
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    align-items: center;
+    padding: 5px 40px;
+}
+
+.title-d>.c1{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 30px;
+}
+
+.title-d>.c1>.lab{
+    padding: 10px 15px;
+    background-color: #00b8f5;
+    color: #fff;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.title-d>.c2{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.seats-container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 200px;
+}
+
+.seats-container> .row{
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.seats-container> .row> .column{
+    height:22px;
+    width:20px;
+    border-radius:5px;
+
+    
+}
+.available{
+    border:1px solid #00b8f5;
+    cursor: pointer;
+}
+
+
+.seats-container > .screen{
+    margin-top: 20px;
+    width: 20rem;
+  height: 1rem;
+  background-color: #48abe0;
+  border-radius: 10rem 10rem 0 0;
+}
+
+.active{
+     background-color: #00b8f5;
+     border:1px solid  #00b8f5; 
+     cursor: pointer;
+}
+
+.blocked{
+    cursor:not-allowed;
+    background-color: #808080;
+    border:1px solid #7a7a7a;
+}
+
+.seats-details{
+    width: 100%;
+    position:fixed;
+    background-color: #fff;
+    bottom: 0px;
+    border-top: 1px solid rgb(234, 234, 234);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 10px;
+}
