@@ -1,22 +1,21 @@
 import { Badge, Button, Text, Title } from "@mantine/core";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import AuthService from "../../services/movie.service";
+import {  useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "./movieDetails.css"
-import { addMovie } from "../../redux/features/selectedSlice";
 import { useNavigate } from "react-router-dom";
 import HeadersComponent from "../../components/header/header";
 
 const MovieDetails = () => {
   const [data,setData] = useState();
   const [loading,setLoading] = useState(false);
+  console.log(loading);
   const s = useSelector((e) => e.seleted);
   const nav = useNavigate();
-  const dispatch = useDispatch()
   useEffect(()=>{
 
     getMovieList();
+    // eslint-disable-next-line
   },[])
 
   const getMovieList = async()=>{
@@ -34,7 +33,7 @@ const MovieDetails = () => {
     >Back</Button>
   </Link>
  </div>
-  {data!=undefined&&<div className="details-main">
+  {data!==undefined&&<div className="details-main">
     <div className="main-poster">
         <div className="card-group">
             <div key={data._id} className="main-cards" >
@@ -65,7 +64,7 @@ const MovieDetails = () => {
             </div>
             <div style={{display:"flex",gap:"20px"}}>
                  <Button color="red.7">
-                  <a href={data.trailer} target="_blank" style={{textDecoration:"none",color:"#fff"}}>
+                  <a href={data.trailer} target="_blank" rel="noreferrer" style={{textDecoration:"none",color:"#fff"}}>
                   <i className="fa-solid fa-circle-play"></i> &nbsp;&nbsp;Trailer
                   </a>
                   </Button>

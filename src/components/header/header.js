@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { createStyles, Header, Container, Group, Burger, rem, Title, Button, Avatar, Text, Menu, Image } from '@mantine/core';
+import { createStyles, Header, Container, Group,  rem, Title, Button, Avatar,  Menu, Image } from '@mantine/core';
 import image from '../../assert/profile.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { logouts } from '../../redux/features/userSlice';
@@ -10,7 +9,7 @@ import { notifications } from '@mantine/notifications';
 const useStyles = createStyles((theme) => ({
   header: {
     display: 'flex',
-    justifyContent: '',
+    justifyContent: 'space-between',
     alignItems: 'center',
     height: '100%',
   },
@@ -48,7 +47,7 @@ const useStyles = createStyles((theme) => ({
 
 
 function HeadersComponent() {
-  const { classes, cx } = useStyles();
+  const { classes,  } = useStyles();
   const dispatch = useDispatch();
   const {value} = useSelector((e) => e.user);
   const nav = useNavigate('')
@@ -89,7 +88,7 @@ function HeadersComponent() {
                 onClick={()=>{
                   nav('/ticket')
                 }}
-                 icon={<img src="https://img.icons8.com/color/35/null/ticket.png"/>}
+                 icon={<img src="https://img.icons8.com/color/35/null/ticket.png" alt=''/>}
                  >My Ticket</Menu.Item>
                  <Menu.Item 
                  onClick={()=>{
@@ -101,7 +100,7 @@ function HeadersComponent() {
                   dispatch(logouts({value:false}))
                   
                  }}
-                 icon={<img src="https://img.icons8.com/external-kmg-design-detailed-outline-kmg-design/35/000000/external-logout-real-estate-kmg-design-detailed-outline-kmg-design.png"/>}
+                 icon={<img src="https://img.icons8.com/external-kmg-design-detailed-outline-kmg-design/35/000000/external-logout-real-estate-kmg-design-detailed-outline-kmg-design.png" alt=''/>}
                  >Logout</Menu.Item>
                </Menu.Dropdown>
             </Menu>

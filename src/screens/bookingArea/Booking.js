@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Flex, Group, Modal, Text, Title } from "@mantine/core";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import "./Booking.css"
 import MovieService from "../../services/movie.service";
@@ -22,11 +22,11 @@ const Booking = () => {
     let [buget,setBuget] = useState(0);
     let [prime,setPrime]= useState(0);
 
-    const [opened, { open, close }] = useDisclosure(false);
+    const [ {  close }] = useDisclosure(false);
 
   
 
-    const onToken = (token) => {
+    const onToken = () => {
     // Send the token to your server to process the payment
     // console.log(token);
     ticketBook()
@@ -35,31 +35,32 @@ const Booking = () => {
 
     const data = Date().split(" ");
     const time =()=>{
-        if(value.showTime[0]=="Morning"){
+        if(value.showTime[0]==="Morning"){
             return "9:10 AM"
-        }else if(value.showTime[0]=="Noon"){
+        }else if(value.showTime[0]==="Noon"){
             return "12:45 PM"
-        }else if(value.showTime[0]=="Evening"){
+        }else if(value.showTime[0]==="Evening"){
             return "4:50 PM"
-        }else if(value.showTime[0]=="Night"){
+        }else if(value.showTime[0]==="Night"){
             return "8:45 PM"
         }
     } 
-    const screen =()=>{
-        if(value.showTime[0]=="Morning"){
-            return "Screen 1"
-        }else if(value.showTime[0]=="Noon"){
-            return "Screen 2"
-        }else if(value.showTime[0]=="Evening"){
-            return "Screen 3"
-        }else if(value.showTime[0]=="Night"){
-            return "Screen 4"
-        }
-    }
+    // const screen =()=>{
+    //     if(value.showTime[0]=="Morning"){
+    //         return "Screen 1"
+    //     }else if(value.showTime[0]=="Noon"){
+    //         return "Screen 2"
+    //     }else if(value.showTime[0]=="Evening"){
+    //         return "Screen 3"
+    //     }else if(value.showTime[0]=="Night"){
+    //         return "Screen 4"
+    //     }
+    // }
     
     const confirmBooking = async(x)=>{
         try {
-        let data = await MovieService.updateSeats(seatData.id,indexData,x);
+       await MovieService.updateSeats(seatData.id,indexData,x);
+
          notifications.show({
             title: `Ticket booking successfully`,
             message: 'success',
@@ -91,19 +92,19 @@ const Booking = () => {
         
     }
 
-    const billGenerate =()=>{
-        console.log("hello");
-        indexData.map((e)=>{
-            if(e.row==="A"){
-                // setBuget(buget++);
-                console.log("a");
-            }else{
-                // setPrime(prime++);
-                  console.log("b");
-            }
-        })
+    // const billGenerate =()=>{
+    //     console.log("hello");
+    //     indexData.map((e)=>{
+    //         if(e.row==="A"){
+    //             // setBuget(buget++);
+    //             console.log("a");
+    //         }else{
+    //             // setPrime(prime++);
+    //               console.log("b");
+    //         }
+    //     })
        
-    }
+    // }
       const ticketBook=async()=>{
 
         let props = {
@@ -117,7 +118,7 @@ const Booking = () => {
         }
 
         try {
-        let res = await MovieService.ticketBooking(props);
+         await MovieService.ticketBooking(props);
         // console.log(res);
         handleBooking();
         } catch (error) {
@@ -255,7 +256,7 @@ const Booking = () => {
                                  onClick={()=>{
                                     // billGenerate();
                                     if(seatData.seats[i].s[si].bu!==true&&seatData.seats[i].s[si].cos!==true){
-                                            if(seatData.seats[i].s[si].bu==false){
+                                            if(seatData.seats[i].s[si].bu===false){
                                             let colCopy = seats[i].s.map((c,ci)=>({
                                             ...c,bu:c.b===se.b?true:c.bu
                                             }))
@@ -282,8 +283,8 @@ const Booking = () => {
                                            
                                     }
                                     
-                                    if(seatData.seats[i].s[si].bu===true && seatData.seats[i].s[si].cos==false){
-                                            let colCopy = seats[i].s.map((c,ci)=>({
+                                    if(seatData.seats[i].s[si].bu===true && seatData.seats[i].s[si].cos===false){
+                                            let colCopy = seats[i].s.map((c)=>({
                                             ...c,bu:c.b===se.b?false:c.bu
                                             }))
                                             let seatsCopy = seats.map((se,ind)=>({
@@ -294,7 +295,7 @@ const Booking = () => {
                                             let indexDataCopy = [...indexData];
                                             let preInx;
                                             indexDataCopy.map((ri,ir)=>{
-                                                if(ri.rowId==i&&ri.colId==si){
+                                                if(ri.rowId===i&&ri.colId===si){
                                                     preInx=ir;
                                                   
                                                 }

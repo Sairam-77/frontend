@@ -1,4 +1,4 @@
-import { Button, CloseButton, Flex, Group, Modal, Text, Title } from "@mantine/core";
+import { Button, CloseButton, Flex, Modal, Text, Title } from "@mantine/core";
 import React from "react";
 
 const Alert = (props) => {
@@ -11,7 +11,7 @@ const Alert = (props) => {
                 />
             </Flex>
           
-             {props.type=="seats"?<Text p={10} pt={15} fz={17} sx={{display:"flex",flexDirection:"row",gap:"5px"}}>Seats : {props.message.map((e)=><Text >{e.seatNo}, </Text>)}</Text>:<Text p={10} pt={15} >{props.message}</Text>}
+             {props.type==="seats"?<Text p={10} pt={15} fz={17} sx={{display:"flex",flexDirection:"row",gap:"5px"}}>Seats : {props.message.map((e)=><Text >{e.seatNo}, </Text>)}</Text>:<Text p={10} pt={15} >{props.message}</Text>}
            
             <Flex direction={"column"} gap={"20px"} justify="center" align="flex-end">
                 

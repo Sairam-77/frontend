@@ -17,6 +17,7 @@ const TicketView = () => {
     const user = useSelector((e) => e.user);
     useEffect(()=>{
         ticketList();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
     const ticketList=async()=>{

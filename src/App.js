@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect } from 'react';
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
 import Login from './auth/Login';
@@ -6,7 +5,6 @@ import ProtectRoute from './auth/ProtectRoute';
 import Register from './auth/Register';
 import Home from './screens/home/home';
 import MovieDetails from './screens/movieDetails/movieDetails';
-import HeadersComponent from './components/header/header';
 import Booking from './screens/bookingArea/Booking';
 import TicketView from './screens/Ticket/ticketView';
 

@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Carousel } from '@mantine/carousel';
 import HeadersComponent from "../../components/header/header";
-import { Box, Button, Card, Flex, Grid, Image, Text, Title } from "@mantine/core";
+import { Box, Button,  Flex, Image, Text, Title } from "@mantine/core";
 import MovieService from "../../services/movie.service";
 import "./home.css"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addMovie } from "../../redux/features/selectedSlice";
 import ChatBot from 'react-simple-chatbot';
-import botImage from "../../assert/chartBot.svg"
 import { ThemeProvider } from 'styled-components';
 
 
@@ -28,10 +27,10 @@ const Home = () => {
 
   const [list,setList] = useState();
   const [loading,setLoading] = useState(false);
+  console.log(loading);
   const [data,setData] = useState();
   const nav = useNavigate();
   const dispatch = useDispatch();
-  const popupRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false); // track whether chatbot is open
   const {value} = useSelector((e) => e.user);
   console.log(value);
@@ -41,7 +40,8 @@ const Home = () => {
 
   useEffect(()=>{
     getMovieList();
-    ticketLists()
+    ticketLists();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
 //api
@@ -125,9 +125,9 @@ const Home = () => {
   //  const steps = 
 
 
-   const toggleChatbot = () => {
-      setIsOpen(!isOpen); // toggle isOpen state
-   };
+  //  const toggleChatbot = () => {
+  //     setIsOpen(!isOpen); // toggle isOpen state
+  //  };
 
 
 
