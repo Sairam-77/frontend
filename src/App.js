@@ -8,6 +8,7 @@ import Home from './screens/home/home';
 import MovieDetails from './screens/movieDetails/movieDetails';
 import HeadersComponent from './components/header/header';
 import Booking from './screens/bookingArea/Booking';
+import TicketView from './screens/Ticket/ticketView';
 
 
 
@@ -28,6 +29,7 @@ function App() {
           <Route path='/home' element={<Home/>}/>
           <Route path='/details' element={<MovieDetails/>}/>
           <Route path='/booking' element={<Booking/>}/>
+          <Route path='/ticket' element={<TicketView/>}/>
       </Route>
     </Routes>
   </Router>

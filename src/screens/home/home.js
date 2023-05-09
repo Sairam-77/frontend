@@ -14,7 +14,6 @@ import { ThemeProvider } from 'styled-components';
 
 const theme = {
   background: '#f5f8fb',
-  // fontFamily: 'Helvetica Neue',
   headerBgColor: '#228be6',
   headerFontColor: '#fff',
   headerFontSize: '15px',
@@ -26,34 +25,58 @@ const theme = {
 
 
 const Home = () => {
-//   const steps = [
-//   {
-//     id: 'welcome',
-//     message: 'Welcome! Do you want to go to our website?',
-//     trigger: 'website'
-//   },
-//   {
-//     id: 'website',
-//     options: [
-//       { value: 'yes', label: 'Yes', trigger: () => <Redirect to="/website" /> },
-//       { value: 'no', label: 'No', end: true }
-//     ]
-//   }
-// ];
 
-   
-
+  const [list,setList] = useState();
+  const [loading,setLoading] = useState(false);
   const [data,setData] = useState();
   const nav = useNavigate();
   const dispatch = useDispatch();
   const popupRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false); // track whether chatbot is open
   const {value} = useSelector((e) => e.user);
+  console.log(value);
+
+
 
 
   useEffect(()=>{
     getMovieList();
+    ticketLists()
   },[])
+
+//api
+  const ticketLists=async()=>{
+        setLoading(true)
+        console.log("working");
+        try {
+            const res = await MovieService.ticketList(
+            {
+                where: { email:value.email }
+            }
+        )
+        setList(res.data)
+        setLoading(false)
+        console.log("dbd",res.data);
+        } catch (error) {
+        setLoading(false)
+        alert(error)
+        }
+        
+  }
+
+  
+  const getMovieList = async()=>{
+    setLoading(true)
+    try {
+      const res = await MovieService.getMovies();
+    console.log(res);
+    setLoading(false)
+    setData(res)
+    } catch (error) {
+      setLoading(false)
+    }
+    
+  }
 
 
   const getListBot = (val) => {
@@ -66,7 +89,7 @@ const Home = () => {
           <Image radius={"sm"} src={e.poster} width={100} />
            <Button fullWidth onClick={()=>{
                               dispatch(addMovie(e))
-                              nav('/details')
+                              nav('/booking')
                             }}>Book</Button>
           </Box>
         ),
@@ -76,9 +99,52 @@ const Home = () => {
     })
   }
 
+  const getTicketBot = (val) => {
+    return list?.map((e, index) => {
+      // console.log(e);
+      return {
+        id: `ticket-${index}`,
+        // message: e.name,
+        component:(
+          <Box>
+          <Image radius={"sm"} src={e.type} width={100} />
+           <Button fullWidth onClick={()=>{
+                              // dispatch(addMovie(e))
+                              nav('/ticket')
+                            }}>View Ticket</Button>
+          </Box>
+        ),
+        trigger:index!==list.length-1? `ticket-${index + 1}`:`3`,
+       
+      }
+    })
+  }
+  // getTicketBot(list);
   // console.log(data.length);
 
-   const steps = data&&[
+  //  const steps = 
+
+
+   const toggleChatbot = () => {
+      setIsOpen(!isOpen); // toggle isOpen state
+   };
+
+
+
+
+  //chatbot functions
+  
+  return <>
+ 
+  <div>
+     
+       <div>
+    
+      {data&&list&&<ThemeProvider theme={theme}>
+        
+      <ChatBot
+            floating={true}
+            steps={[
               {
                 id: '1',
                 message: `Hi ${value.userName} , How can I help you ?`,
@@ -89,6 +155,7 @@ const Home = () => {
                 options: [
                   { value: 1, label: 'List of Movies', trigger: 'list-0' },
                   { value: 2, label: 'Recommanded Movie', trigger: 'recommend' },
+                  { value: 3, label: 'Your Ticket', trigger: 'ticket-0' },
                 ],
               },
               {
@@ -131,46 +198,9 @@ const Home = () => {
                 ),
                 trigger:'3'
               },
-  ]
-
-
-   const toggleChatbot = () => {
-      setIsOpen(!isOpen); // toggle isOpen state
-   };
-
-
-
-  const getMovieList = async()=>{
-    const res = await MovieService.getMovies();
-    console.log(res);
-    setData(res)
-  }
-
-  //chatbot functions
-  
-  return <>
- 
-  <div>
-     
-       <div>
-      {/* <button onClick={toggleChatbot}>Toggle Chatbot</button> */}
-
-      {/* {isOpen && (
-        // <div className="chatbot-container"  >
-        //    <ThemeProvider theme={theme}>
-        //    <ChatBot
-        //     floating={true}
-        //     steps={steps}
-
-        //    />
-        //    </ThemeProvider>
-        // </div>
-         
-      )} */}
-      {data&&<ThemeProvider theme={theme}>
-      <ChatBot
-            floating={true}
-            steps={steps}
+              ...getTicketBot(list),
+              
+  ]}
             opened={isOpen}
             onToggleFloating={() => setIsOpen(!isOpen)}
            />
@@ -217,6 +247,8 @@ const Home = () => {
             </div>
       }):"Loading"}
    </div>
+ 
+
   </>;
 };
 

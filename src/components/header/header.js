@@ -3,12 +3,14 @@ import { createStyles, Header, Container, Group, Burger, rem, Title, Button, Ava
 import image from '../../assert/profile.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { logouts } from '../../redux/features/userSlice';
+import { useNavigate } from 'react-router-dom';
+import { notifications } from '@mantine/notifications';
 // import { IconChevronRight } from '@tabler/icons-react';
 
 const useStyles = createStyles((theme) => ({
   header: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: '',
     alignItems: 'center',
     height: '100%',
   },
@@ -49,6 +51,7 @@ function HeadersComponent() {
   const { classes, cx } = useStyles();
   const dispatch = useDispatch();
   const {value} = useSelector((e) => e.user);
+  const nav = useNavigate('')
 
   return (
     <Header height={60}>
@@ -83,11 +86,20 @@ function HeadersComponent() {
                  <Menu.Item>{value.email}</Menu.Item>
                  <Menu.Divider />
                 <Menu.Item 
+                onClick={()=>{
+                  nav('/ticket')
+                }}
                  icon={<img src="https://img.icons8.com/color/35/null/ticket.png"/>}
                  >My Ticket</Menu.Item>
                  <Menu.Item 
                  onClick={()=>{
+                  notifications.show({
+                  title: "You where Loged out, please login",
+                  message: 'Warning',
+                  color:"warning"
+                })
                   dispatch(logouts({value:false}))
+                  
                  }}
                  icon={<img src="https://img.icons8.com/external-kmg-design-detailed-outline-kmg-design/35/000000/external-logout-real-estate-kmg-design-detailed-outline-kmg-design.png"/>}
                  >Logout</Menu.Item>

@@ -22,12 +22,23 @@ const updateSeats = async (id,selected,selectedSeats)=>{
    return response.data
 }
 
+const ticketBooking = async (props)=>{
+  const response = await apiClient.post("/ticket/create",props);
+  return response
+}
+
+const ticketList = async (props)=>{
+  const response = await apiClient.post("/ticket/list",props);
+  return response
+}
 
 
 const MovieService = {
  
   getMovies,
   updateSeats,
+  ticketBooking,
+  ticketList
 }
 
 export default MovieService;

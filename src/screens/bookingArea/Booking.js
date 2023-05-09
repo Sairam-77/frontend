@@ -1,21 +1,37 @@
-import { Button, Group, Text, Title } from "@mantine/core";
+import { Box, Button, Divider, Flex, Group, Modal, Text, Title } from "@mantine/core";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import "./Booking.css"
 import MovieService from "../../services/movie.service";
 import Alert from "../../components/Alert";
 import { useNavigate } from "react-router-dom";
+import StripeCheckout from "react-stripe-checkout";
+import { useDisclosure } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 
 const Booking = () => {
     const nav = useNavigate();
     const {value} = useSelector((e) => e.seleted);
+     const user = useSelector((e) => e.user);
+     console.log(user);
     const [seatData,setSeatData] = useState(value);
     const [seats,setSeats] = useState(seatData.seats);
     const [indexData,setIndexData] = useState([]);
     const [confirm,setConfirm] = useState(false);
-    const [open,setOpen] = useState(false);
+    const [opens,setOpen] = useState(false);
     let [buget,setBuget] = useState(0);
     let [prime,setPrime]= useState(0);
+
+    const [opened, { open, close }] = useDisclosure(false);
+
+  
+
+    const onToken = (token) => {
+    // Send the token to your server to process the payment
+    // console.log(token);
+    ticketBook()
+    setConfirm(false)
+  };
 
     const data = Date().split(" ");
     const time =()=>{
@@ -29,10 +45,34 @@ const Booking = () => {
             return "8:45 PM"
         }
     } 
+    const screen =()=>{
+        if(value.showTime[0]=="Morning"){
+            return "Screen 1"
+        }else if(value.showTime[0]=="Noon"){
+            return "Screen 2"
+        }else if(value.showTime[0]=="Evening"){
+            return "Screen 3"
+        }else if(value.showTime[0]=="Night"){
+            return "Screen 4"
+        }
+    }
     
     const confirmBooking = async(x)=>{
+        try {
         let data = await MovieService.updateSeats(seatData.id,indexData,x);
-        console.log(data);
+         notifications.show({
+            title: `Ticket booking successfully`,
+            message: 'success',
+            color:"green"
+          })
+        //   console.log();
+
+          nav("/home");
+
+        } catch (error) {
+            console.log(error);
+        }
+       
     }
     const handleBooking=()=>{
         let x = [...seatData.seats]
@@ -64,9 +104,87 @@ const Booking = () => {
         })
        
     }
-    console.log("prime",prime,"low",buget);
+      const ticketBook=async()=>{
+
+        let props = {
+            email:user.value.email,
+            name:seatData.name,
+            type:seatData.poster,
+            showTime:`Tamil, 2D&${time()}`,
+            date:`${data[0]},${data[2]} ${data[1]},2023`,
+            seats:indexData.map(e=>e.seatNo),
+            screen:`${seatData.screen}`
+        }
+
+        try {
+        let res = await MovieService.ticketBooking(props);
+        // console.log(res);
+        handleBooking();
+        } catch (error) {
+            
+        }
+        
+        
+
+    }
   return <>
-  {open&&<Alert setOpen={setOpen} open={open} setConfirm={setConfirm} title={"Confirm Seats to Move Payment Page ?"} type="seats" message={indexData} />}
+     <Modal opened={confirm} onClose={()=>{
+        close();
+        setConfirm();
+     }} title={<Title fz={18}>Almost there!</Title>} centered>
+        <Box>
+            <Flex justify={"space-between"} pb={5}>
+                <Text fz={17} >{seatData.name}</Text>
+                <Text>{buget+prime}</Text>
+            </Flex>
+            <Flex justify={"space-between"}>
+                <Text fz={13} c={"dimmed"} >Tamil , 2D</Text>
+                <Text fz={13} c={"red"}>E-Ticket</Text>
+            </Flex>
+            <Text c={"dimmed"} fz={13}>{data[0]},{`${data[2]} ${data[1]}`},2023 | {time()}</Text>
+            <Flex justify={"space-between"} pt={5}>
+                <Text fz={15} >Seats No:</Text>
+                <Flex >{indexData.map((e)=><Text fz={14} >{e.seatNo} &nbsp;</Text>)}</Flex>
+            </Flex>
+             <Divider my="sm" variant="dashed" />
+
+            <Flex justify={"space-between"}>
+                <Text fz={16} >Tickets Price</Text>
+                <Text fz={16}>₹{(buget*60)+(prime*190)}</Text>
+            </Flex>
+            <Flex justify={"space-between"} pb={10}>
+                <Text fz={16} >Convenience fees ₹25/Ticket</Text>
+                <Text fz={16}>₹{(buget+prime)*(25)}</Text>
+            </Flex>
+             <StripeCheckout
+      stripeKey="pk_test_51N3L4pSJun2dOOyyCB10Et86wBcuLlBE4K7JBInNrknI1pUGCUkqT0S1ub154c2T1wtxvhd1pBSSYHDOQ32gyEeu00Iji5YnVb"
+      token={onToken}
+      name="CINEMAX"
+      description="Payment Mode"
+      amount={(((buget*60)+(prime*190))+((buget+prime)*(25)))*100} 
+      currency="INR"
+      email={user.value.email}
+      onClose={() => setConfirm(true)}
+      
+    >
+        <Button fullWidth mt={20} onClick={()=>setConfirm(false)}>Pay ₹{((buget*60)+(prime*190))+((buget+prime)*(25))}</Button>
+    </StripeCheckout>
+        </Box>
+      
+    </Modal>
+  {/* {confirm&&<StripeCheckout
+      stripeKey="pk_test_51N3L4pSJun2dOOyyCB10Et86wBcuLlBE4K7JBInNrknI1pUGCUkqT0S1ub154c2T1wtxvhd1pBSSYHDOQ32gyEeu00Iji5YnVb"
+      token={onToken}
+      name="My Awesome Store"
+      description="Purchase Description"
+      amount={1000} 
+      currency="INR"
+      email="a@gmail.com"
+      onClose={() => setConfirm(false)}
+      onOpen={confirm}
+      
+    ></StripeCheckout>} */}
+  {opens&&<Alert setOpen={setOpen} open={opens} setConfirm={setConfirm} title={"Confirm Seats to Move Payment Page ?"} type="seats" message={indexData} />}
   {seatData?<div className="booking-main">
     <header className="booking-head">
         <div className="c1">

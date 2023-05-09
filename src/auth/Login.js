@@ -16,12 +16,14 @@ import { useForm } from '@mantine/form';
 import { useDispatch } from 'react-redux';
 import { logins } from '../redux/features/userSlice';
 import { setToken } from '../redux/features/tokenSlice';
+import { useState } from 'react';
 
  function Login() {
   const nav = useNavigate();
+  const [loading,setLoading]= useState(false);
   const dispatch = useDispatch();
   const handleSubmit =async(value)=>{
-      
+      setLoading(true)
       try {
         let data = {
             email:value.email,
@@ -35,18 +37,21 @@ import { setToken } from '../redux/features/tokenSlice';
             message: 'success',
             color:"green"
           })
-          console.log();
+          // console.log();
+          setLoading(false)
           dispatch(logins(res.details))
           dispatch(setToken(res.token))
           nav("/home");
       }
       
-      } catch (error) {
+      } catch (error) 
+      {
         notifications.show({
             title: `${error.response.data.message}`,
             message: 'Failed',
             color:"red"
           })
+          setLoading(false)
       }
    }
 
@@ -91,7 +96,7 @@ import { setToken } from '../redux/features/tokenSlice';
               })}>
         <TextInput label="Email" placeholder="you@mantine.dev" required  {...form.getInputProps("email")} />
         <PasswordInput label="Password" placeholder="Your password" required mt="md"  {...form.getInputProps("password")} />
-        <Button type='submit' fullWidth mt="xl">
+        <Button type='submit' fullWidth mt="xl" loading={loading}>
           Sign in
         </Button>
         </form>
